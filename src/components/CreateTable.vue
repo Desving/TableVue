@@ -1,0 +1,65 @@
+<template>
+    <div class="col-3 mt-5">
+        <button class="btn btn-primary" @click="setModalCreateTable">Создание таблицы</button>
+        <div class="modal fade" v-bind:class="{ show: isModalCreateTable }">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Введите данные таблицы</h4>
+                        <button type="button" class="close" @click="setModalCreateTable">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="">
+                            <div class="form-group">
+                                <label for="fields">Fields</label>
+                                <textarea class="form-control" id="fields" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="Rows">Rows</label>
+                                <textarea class="form-control" id="Rows" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="Meta">Meta</label>
+                                <textarea class="form-control" id="Meta" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" @click="setModalCreateTable">Отмена</button>
+                        <button type="button" class="btn btn-primary">Добавить</button>
+                    </div>
+                </div><!-- /.модальное окно-Содержание -->
+            </div><!-- /.модальное окно-диалог -->
+        </div><!-- /.модальное окно -->
+    </div>
+</template>
+
+<script>
+    export default {
+        name: 'CreateTable',
+        computed: {
+            isModalCreateTable() {
+                return this.$store.getters.getOpenModalCreateTable;
+            },
+        },
+        methods: {
+            setModalCreateTable() {
+                this.$store.dispatch('setModalCreateTable');
+            }
+        }
+    }
+</script>
+
+<style>
+    .show {
+        display: block !important;
+        background: rgba(0, 0, 0, 0.5);;
+    }
+    .close:focus,
+    .close *:focus
+    {
+        outline: none;
+    }
+</style>
