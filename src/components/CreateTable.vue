@@ -17,12 +17,20 @@
                                 <textarea class="form-control" id="fields" rows="3"></textarea>
                             </div>
                             <div class="form-group">
-                                <label for="Rows">Rows</label>
-                                <textarea class="form-control" id="Rows" rows="3"></textarea>
+                                <label for="rowsCount">Rows</label>
+                                <input type="number" id="rowsCount" class="form-control" placeholder="Enter count rows">
                             </div>
                             <div class="form-group">
-                                <label for="Meta">Meta</label>
-                                <textarea class="form-control" id="Meta" rows="3"></textarea>
+                                <label>Meta</label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Enter header cell class">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Enter even rows class">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Enter odd rows class">
+                                </div>
                             </div>
                         </form>
                     </div>
