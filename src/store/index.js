@@ -11,8 +11,9 @@ export default new Vuex.Store({
         },
         addDataTables(context, payload) {
             context.commit('SET_MODAL_CREATE_TABLE');
+            context.commit('TOGGLE_LOADING');
             let params = {
-                "rows": "1000",
+                "rows": "10",
                 "id": "{number|1000}",
                 "firstName": "{firstName}",
                 "lastName": "{lastName}",
@@ -33,12 +34,16 @@ export default new Vuex.Store({
                 })
                 .finally(function () {
                     // always executed
+                    context.commit('TOGGLE_LOADING');
                 });
         }
     },
     mutations: {
         SET_MODAL_CREATE_TABLE(state){
             state.isOpenModalCreateTable = !state.isOpenModalCreateTable;
+        },
+        TOGGLE_LOADING(state){
+            state.isLoading = !state.isLoading;
         },
         ADD_DATA_TABLE(state, rowsData) {
             state.arTablesData.push({
@@ -50,11 +55,15 @@ export default new Vuex.Store({
     },
     state: {
         isOpenModalCreateTable: false,
-        arTablesData: []
+        arTablesData: [],
+        isLoading: false,
     },
     getters: {
         getOpenModalCreateTable(state){
             return state.isOpenModalCreateTable;
+        },
+        getLoading(state) {
+            return state.isLoading;
         },
         getArDataTables(state){
             state.arTablesData.forEach((tableData) => {
