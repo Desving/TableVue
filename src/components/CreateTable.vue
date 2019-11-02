@@ -36,7 +36,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="setModalCreateTable">Отмена</button>
-                        <button type="button" class="btn btn-primary">Добавить</button>
+                        <button type="button" class="btn btn-primary" @click="addTable">Добавить</button>
                     </div>
                 </div><!-- /.модальное окно-Содержание -->
             </div><!-- /.модальное окно-диалог -->
@@ -55,6 +55,9 @@
         methods: {
             setModalCreateTable() {
                 this.$store.dispatch('setModalCreateTable');
+            },
+            addTable() {
+                this.$store.dispatch('addDataTables');
             }
         }
     }
