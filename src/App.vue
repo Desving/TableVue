@@ -1,8 +1,8 @@
 <template>
     <div class="container">
         <create-table></create-table>
-        <div class="mb-5" v-for="dataTable in arDataTables">
-            <vue-table v-bind="dataTable"></vue-table>
+        <div class="mb-5" v-for="(dataTable,keyTable) in arDataTables">
+            <vue-table v-bind="dataTable" v-bind:key-table="keyTable"></vue-table>
         </div>
         <preloader v-if="isLoading"></preloader>
     </div>
