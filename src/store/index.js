@@ -9,11 +9,12 @@ export default new Vuex.Store({
         setModalCreateTable(context){
             context.commit('SET_MODAL_CREATE_TABLE');
         },
-        addDataTables(context, payload) {
+        async addDataTables(context, payload) {
             context.commit('SET_MODAL_CREATE_TABLE');
             context.commit('TOGGLE_LOADING');
+            console.log(payload, 'payload');
             let params = {
-                "rows": "10",
+                "rows": payload.rowsCount,
                 "id": "{number|1000}",
                 "firstName": "{firstName}",
                 "lastName": "{lastName}",
@@ -23,17 +24,17 @@ export default new Vuex.Store({
                 "description": "{lorem|32}",
             };
 
-            axios.get(urlForTable, {
+            await axios.get(urlForTable, {
                 params
             })
                 .then(function (response) {
-                    context.commit('ADD_DATA_TABLE', response.data);
+                    payload.rows =  response.data;
+                    context.commit('ADD_DATA_TABLE', payload);
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
                 .finally(function () {
-                    // always executed
                     context.commit('TOGGLE_LOADING');
                 });
         }
@@ -45,12 +46,8 @@ export default new Vuex.Store({
         TOGGLE_LOADING(state){
             state.isLoading = !state.isLoading;
         },
-        ADD_DATA_TABLE(state, rowsData) {
-            state.arTablesData.push({
-                "fields": ['id', 'firstName', "lastName", 'email', 'adress', 'phone'],
-                "rows": rowsData,
-                "meta": false,
-            });
+        ADD_DATA_TABLE(state, tableData) {
+            state.arTablesData.push(tableData);
         }
     },
     state: {

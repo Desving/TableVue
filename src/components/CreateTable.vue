@@ -11,32 +11,34 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="">
+                        <div class="form-group">
+                            <label for="fields">Fields</label>
+                            <input type="text" v-model="fields" class="form-control" id="fields" required/>
+                        </div>
+                        <div class="form-group">
+                            <label for="rowsCount">Rows</label>
+                            <input type="number" v-model="rowsCount" id="rowsCount" class="form-control"
+                                   placeholder="Enter count rows" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Meta</label>
                             <div class="form-group">
-                                <label for="fields">Fields</label>
-                                <textarea class="form-control" id="fields" rows="3"></textarea>
+                                <input type="text" v-model="metaHeader" class="form-control"
+                                       placeholder="Enter header cell class">
                             </div>
                             <div class="form-group">
-                                <label for="rowsCount">Rows</label>
-                                <input type="number" id="rowsCount" class="form-control" placeholder="Enter count rows">
+                                <input type="text" v-model="metaEven" class="form-control"
+                                       placeholder="Enter even rows class">
                             </div>
                             <div class="form-group">
-                                <label>Meta</label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter header cell class">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter even rows class">
-                                </div>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" placeholder="Enter odd rows class">
-                                </div>
+                                <input type="text" v-model="metaOdd" class="form-control"
+                                       placeholder="Enter odd rows class">
                             </div>
-                        </form>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" @click="setModalCreateTable">Отмена</button>
-                        <button type="button" class="btn btn-primary" @click="addTable">Добавить</button>
+                        <button type="submit" class="btn btn-primary" @click="addTable">Добавить</button>
                     </div>
                 </div><!-- /.модальное окно-Содержание -->
             </div><!-- /.модальное окно-диалог -->
@@ -47,6 +49,15 @@
 <script>
     export default {
         name: 'CreateTable',
+        data: function () {
+            return {
+                fields: 'id, firstName, lastName, email, adress, phone',
+                rowsCount: '10',
+                metaOdd: '',
+                metaEven: '',
+                metaHeader: '',
+            }
+        },
         computed: {
             isModalCreateTable() {
                 return this.$store.getters.getOpenModalCreateTable;
@@ -57,8 +68,16 @@
                 this.$store.dispatch('setModalCreateTable');
             },
             addTable() {
-                this.$store.dispatch('addDataTables');
-            }
+                this.$store.dispatch('addDataTables', {
+                    'fields': this.fields.split(', '),
+                    'rowsCount': Number.parseInt(this.rowsCount, 10),
+                    'meta': {
+                        'odd': this.metaOdd,
+                        'even': this.metaEven,
+                        'header': this.metaHeader,
+                    }
+                });
+            },
         }
     }
 </script>
@@ -68,9 +87,9 @@
         display: block !important;
         background: rgba(0, 0, 0, 0.5);;
     }
+
     .close:focus,
-    .close *:focus
-    {
+    .close *:focus {
         outline: none;
     }
 </style>
