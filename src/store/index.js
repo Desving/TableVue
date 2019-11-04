@@ -35,7 +35,6 @@ export default new Vuex.Store({
             })
                 .then(function (response) {
                     payload.rows =  response.data;
-                    console.log(payload, 'payload');
                     context.commit('ADD_DATA_TABLE', payload);
                 })
                 .catch(function (error) {

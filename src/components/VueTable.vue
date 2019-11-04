@@ -23,9 +23,12 @@
             <td>
                 <button class="btn btn-light" @click="deleteTable">Удаление таблицы</button>
             </td>
-            <td colspan="5">
+            <td>
+                <button class="btn btn-light" @click="copyTable">Копирование данных</button>
+            </td>
+            <td colspan="4">
                 <ul class="pagination d-flex justify-content-center">
-                    <li class="page-item" v-for="pageNumber in getCountPages">
+                    <li class="page-item" v-for="pageNumber in getCountPages" v-if="getCountPages > 1">
                         <button class="page-link" @click="changeCurrentPage(pageNumber)">{{ pageNumber }}</button>
                     </li>
                 </ul>
@@ -78,18 +81,32 @@
             },
             changeCurrentPage(pageNumber) {
                 this.currentPage = pageNumber;
+            },
+            async copyTable() {
+                let objToCopy = {
+                    'fields': this.fields,
+                    'rows': this.rows,
+                    'meta': this.meta,
+                };
+                await navigator.clipboard.writeText(JSON.stringify(objToCopy))
+                .then(() => {
+                    console.log('gg');
+                })
+                .catch(err => {
+                    console.log('Something went wrong', err);
+                });
             }
         },
         computed: {
             getCountPages() {
                 if (this.rows) {
-                    return Math.ceil(this.rows.length/this.countPerPage)
+                    return Math.ceil(this.rows.length / this.countPerPage)
                 }
             },
             getViewChunkRows() {
                 let start = this.countPerPage * (this.currentPage - 1);
                 let end = this.countPerPage * this.currentPage;
-                return this.rows.filter((element, index)=>{
+                return this.rows.filter((element, index) => {
                     return index >= start && index < end
                 })
             }
