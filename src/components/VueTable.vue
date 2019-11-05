@@ -4,15 +4,21 @@
         <tr>
             <th>#</th>
             <th v-for="(cellHeadName, keyHeadCell) in fields">{{ cellHeadName }}</th>
+            <th>actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(row, key) in getViewChunkRows">
-            <th scope="row">{{ key + 1 }}</th>
+        <tr v-for="(row, keyRow) in getViewChunkRows">
+            <th scope="row">{{ keyRow + 1 }}</th>
             <td v-for="field in fields" v-if="field in row">
                 {{row[field]}}
             </td>
             <td v-else> No data </td>
+            <td>
+                <button type="button" class="close">
+                    <span aria-hidden="true" @click="deleteRows(keyRow)">&times;</span>
+                </button>
+            </td>
         </tr>
         </tbody>
         <tfoot>
@@ -78,6 +84,9 @@
             },
             deleteTable() {
                 this.$store.dispatch('deleteTableByKey', this.keyTable);
+            },
+            deleteRows(keyRows) {
+                this.rows.splice(keyRows, 1)
             },
             changeCurrentPage(pageNumber) {
                 this.currentPage = pageNumber;
