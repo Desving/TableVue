@@ -10,8 +10,14 @@
         <tbody>
         <tr v-for="(row, keyRow) in getViewChunkRows">
             <th scope="row">{{ keyRow + 1 }}</th>
-            <td v-for="field in fields" v-if="field in row">
-                {{row[field]}}
+            <td v-for="fieldName in fields" v-if="fieldName in row" @dblclick="changeCell(keyRow, fieldName, row[fieldName])">
+                <input class="form-control" type="text" v-if="isChangeCell(keyRow, fieldName)"
+                       v-model="valueCell"
+                       @keyup.esc="resetChangeCell"
+                       @blur="saveValueCell"
+                       @keyup.enter="saveValueCell"
+                />
+                <div v-else>{{row[fieldName]}}</div>
             </td>
             <td v-else> No data </td>
             <td>
@@ -76,6 +82,9 @@
             return {
                 countPerPage: 10,
                 currentPage: 1,
+                keyChangeRow: 0,
+                nameChangeField: '',
+                valueCell: ''
             }
         },
         methods: {
@@ -90,6 +99,21 @@
             },
             changeCurrentPage(pageNumber) {
                 this.currentPage = pageNumber;
+            },
+            changeCell(keyRow, fieldName, valueCell) {
+                this.keyChangeRow = keyRow;
+                this.nameChangeField = fieldName;
+                this.valueCell = valueCell;
+            },
+            isChangeCell(keyRow, fieldName) {
+                return fieldName === this.nameChangeField && keyRow === this.keyChangeRow;
+            },
+            saveValueCell() {
+                this.rows[this.keyChangeRow][this.nameChangeField] = this.valueCell;
+                this.keyChangeRow = this.nameChangeField = '';
+            },
+            resetChangeCell() {
+                this.keyChangeRow = this.nameChangeField = this.valueCell = '';
             },
             async copyTable() {
                 let objToCopy = {
