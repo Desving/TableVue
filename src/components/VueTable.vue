@@ -20,7 +20,13 @@
                 <div v-else>{{row[fieldName]}}</div>
             </td>
             <td v-else> No data </td>
-            <td>
+            <td class="d-flex justify-content-center">
+                <button type="button" class="btn">
+                    <span aria-hidden="true" @click="addRowByKey(keyRow + 1)">&#8744;</span>
+                </button>
+                <button type="button" class="btn">
+                    <span aria-hidden="true" @click="addRowByKey(keyRow)">&#8743;</span>
+                </button>
                 <button type="button" class="close">
                     <span aria-hidden="true" @click="deleteRows(keyRow)">&times;</span>
                 </button>
@@ -40,7 +46,7 @@
             </td>
             <td colspan="4">
                 <ul class="pagination d-flex justify-content-center">
-                    <li class="page-item" v-for="pageNumber in getCountPages" v-if="getCountPages > 1">
+                    <li class="page-item" v-for="pageNumber in getCountPages" v-if="getCountPages > 1" v-bind:class="currentPage==pageNumber?'active':''">
                         <button class="page-link" @click="changeCurrentPage(pageNumber)">{{ pageNumber }}</button>
                     </li>
                 </ul>
@@ -84,7 +90,8 @@
                 currentPage: 1,
                 keyChangeRow: 0,
                 nameChangeField: '',
-                valueCell: ''
+                valueCell: '',
+                defaultValueForNewRows: 'default'
             }
         },
         methods: {
@@ -110,10 +117,20 @@
             },
             saveValueCell() {
                 this.rows[this.keyChangeRow][this.nameChangeField] = this.valueCell;
-                this.keyChangeRow = this.nameChangeField = '';
+                this.resetChangeCell()
             },
             resetChangeCell() {
-                this.keyChangeRow = this.nameChangeField = this.valueCell = '';
+                this.keyChangeRow = 0;
+                this.nameChangeField = '';
+                this.valueCell = '';
+            },
+            addRowByKey(key) {
+                let keyRow = key * this.currentPage;
+                let newRows = {};
+                this.fields.forEach((element)=>{
+                    newRows[element] = this.defaultValueForNewRows;
+                });
+                this.rows.splice(keyRow, 0, newRows);
             },
             async copyTable() {
                 let objToCopy = {
