@@ -1,11 +1,11 @@
 <template>
     <div class="container">
-        <create-table></create-table>
+        <create-table/>
         <div class="mb-5" v-for="(dataTable,keyTable) in arDataTables"
         :key = keyTable>
-            <vue-table v-bind="dataTable" v-bind:key-table="keyTable"></vue-table>
+            <vue-table v-bind="dataTable" v-bind:key-table="keyTable"/>
         </div>
-        <preloader v-if="isLoading"></preloader>
+        <preloader v-if="isLoading"/>
     </div>
 </template>
 

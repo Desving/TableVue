@@ -16,7 +16,7 @@
                        :odd-class-name="meta.odd"
                        @deleteRow='onDeleteRow'
                        @addRowByKey='onAddRowByKey'
-            ></row-table>
+            />
         </tbody>
         <tfoot>
         <tr>
