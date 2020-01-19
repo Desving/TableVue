@@ -3,12 +3,12 @@
         <thead>
         <tr v-bind:class="addExtraClassHeader">
             <th>#</th>
-            <th v-for="(cellHeadName, keyHeadCell) in fields">{{ cellHeadName }}</th>
+            <th v-bind:key="keyHeadCell" v-for="(cellHeadName, keyHeadCell) in fields">{{ cellHeadName }}</th>
             <th>actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(row, keyRow) in getViewChunkRows" v-bind:class="addExtraClassRow(keyRow)">
+        <tr v-bind:key="keyRow" v-for="(row, keyRow) in getViewChunkRows" v-bind:class="addExtraClassRow(keyRow)">
             <th scope="row">{{ keyRow + 1 }}</th>
             <td v-for="fieldName in fields"
                 v-if="fieldName in row"
@@ -22,7 +22,7 @@
                 />
                 <div v-else>{{row[fieldName]}}</div>
             </td>
-            <td v-else> No data </td>
+            <td v-else> No data</td>
             <td class="d-flex justify-content-center">
                 <button type="button" class="btn">
                     <span aria-hidden="true" @click="addRowByKey(keyRow + 1)">&#8744;</span>
