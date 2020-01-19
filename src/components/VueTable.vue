@@ -83,6 +83,7 @@
             return {
                 countPerPage: 10,
                 currentPage: 1,
+                textForCopySuccesed: 'Таблица успешно добавленна в буфер обмена'
             }
         },
         methods: {
@@ -114,7 +115,7 @@
                 };
                 await navigator.clipboard.writeText(JSON.stringify(objToCopy))
                     .then(() => {
-                        console.log('gg');
+                        alert(this.textForCopySuccesed);
                     })
                     .catch(err => {
                         console.log('Something went wrong', err);
