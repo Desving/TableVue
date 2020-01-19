@@ -1,16 +1,19 @@
 <template>
     <table class="table mt-3">
         <thead>
-        <tr>
+        <tr v-bind:class="addExtraClassHeader">
             <th>#</th>
             <th v-for="(cellHeadName, keyHeadCell) in fields">{{ cellHeadName }}</th>
             <th>actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(row, keyRow) in getViewChunkRows">
+        <tr v-for="(row, keyRow) in getViewChunkRows" v-bind:class="addExtraClassRow(keyRow)">
             <th scope="row">{{ keyRow + 1 }}</th>
-            <td v-for="fieldName in fields" v-if="fieldName in row" @dblclick="changeCell(keyRow, fieldName, row[fieldName])">
+            <td v-for="fieldName in fields"
+                v-if="fieldName in row"
+                @dblclick="changeCell(keyRow, fieldName, row[fieldName])"
+            >
                 <input class="form-control" type="text" v-if="isChangeCell(keyRow, fieldName)"
                        v-model="valueCell"
                        @keyup.esc="resetChangeCell"
@@ -46,8 +49,12 @@
             </td>
             <td colspan="4">
                 <ul class="pagination d-flex justify-content-center">
-                    <li class="page-item" v-for="pageNumber in getCountPages" v-if="getCountPages > 1" v-bind:class="currentPage==pageNumber?'active':''">
-                        <button class="page-link" @click="changeCurrentPage(pageNumber)">{{ pageNumber }}</button>
+                    <li class="page-item" v-for="pageNumber in getCountPages"
+                        v-if="getCountPages > 1"
+                        v-bind:class="currentPage==pageNumber?'active':''">
+                        <button class="page-link" @click="changeCurrentPage(pageNumber)">
+                            {{ pageNumber }}
+                        </button>
                     </li>
                 </ul>
             </td>
@@ -127,10 +134,17 @@
             addRowByKey(key) {
                 let keyRow = key * this.currentPage;
                 let newRows = {};
-                this.fields.forEach((element)=>{
+                this.fields.forEach((element) => {
                     newRows[element] = this.defaultValueForNewRows;
                 });
                 this.rows.splice(keyRow, 0, newRows);
+            },
+            addExtraClassRow(keyRow) {
+                if (keyRow % 2 === 0 && this.meta.even) {
+                    return this.meta.even
+                } else if (keyRow % 2 !== 0 && this.meta.odd) {
+                    return this.meta.odd
+                }
             },
             async copyTable() {
                 let objToCopy = {
@@ -139,12 +153,12 @@
                     'meta': this.meta,
                 };
                 await navigator.clipboard.writeText(JSON.stringify(objToCopy))
-                .then(() => {
-                    console.log('gg');
-                })
-                .catch(err => {
-                    console.log('Something went wrong', err);
-                });
+                    .then(() => {
+                        console.log('gg');
+                    })
+                    .catch(err => {
+                        console.log('Something went wrong', err);
+                    });
             }
         },
         computed: {
@@ -159,6 +173,9 @@
                 return this.rows.filter((element, index) => {
                     return index >= start && index < end
                 })
+            },
+            addExtraClassHeader() {
+                return this.meta.header ? this.meta.header : '';
             }
         }
     }
