@@ -26,16 +26,11 @@
                 <button class="btn btn-light" @click="copyTable">Копирование данных</button>
             </td>
             <td colspan="4">
-                <ul class="pagination d-flex justify-content-center"
-                    v-if="getCountPages > 1">
-                    <li class="page-item" v-for="pageNumber in getCountPages"
-                        :key="pageNumber"
-                        :class="currentPage==pageNumber?'active':''">
-                        <button class="page-link" @click="changeCurrentPage(pageNumber)">
-                            {{ pageNumber }}
-                        </button>
-                    </li>
-                </ul>
+                <pagination-table
+                        :countPages="getCountPages"
+                        :currentPage="currentPage"
+                        @changeCurrentPage="onChangeCurrentPage"
+                />
             </td>
         </tr>
         </tfoot>
@@ -45,12 +40,14 @@
 <script>
     import RowTable from "./RowTable";
     import HeaderTable from "./HeaderTable";
+    import PaginationTable from "./PaginationTable";
 
     export default {
         name: 'VueTable',
         components: {
             RowTable,
-            HeaderTable
+            HeaderTable,
+            PaginationTable
         },
         props: {
             'fields': {
@@ -102,7 +99,7 @@
             deleteTable() {
                 this.$store.dispatch('deleteTableByKey', this.keyTable);
             },
-            changeCurrentPage(pageNumber) {
+            onChangeCurrentPage(pageNumber) {
                 this.currentPage = pageNumber;
             },
             async copyTable() {
