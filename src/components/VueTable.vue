@@ -1,12 +1,8 @@
 <template>
     <table class="table mt-3">
-        <thead>
-        <tr :class="addExtraClassHeader">
-            <th>#</th>
-            <th :key="keyHeadCell" v-for="(cellHeadName, keyHeadCell) in fields">{{ cellHeadName }}</th>
-            <th>actions</th>
-        </tr>
-        </thead>
+        <header-table
+             :fields-name="fields"
+        />
         <tbody>
             <row-table :key="keyRow" v-for="(row, keyRow) in getViewChunkRows"
                        :fields-value="row"
@@ -48,11 +44,13 @@
 
 <script>
     import RowTable from "./RowTable";
+    import HeaderTable from "./HeaderTable";
 
     export default {
         name: 'VueTable',
         components: {
-            RowTable
+            RowTable,
+            HeaderTable
         },
         props: {
             'fields': {
