@@ -6,6 +6,11 @@
             <vue-table v-bind="dataTable" v-bind:key-table="keyTable"/>
         </div>
         <preloader v-if="isLoading"/>
+        <error-modal
+                v-if="errorExist"
+                :error-text="getError"
+        />
+
     </div>
 </template>
 
@@ -13,6 +18,7 @@
     import CreateTable from './components/CreateTable.vue'
     import VueTable from './components/VueTable.vue'
     import Preloader from './components/preloader.vue'
+    import ErrorModal from './components/ErrorModal.vue'
 
 
     export default {
@@ -20,7 +26,8 @@
         components: {
             CreateTable,
             VueTable,
-            Preloader
+            Preloader,
+            ErrorModal
         },
         computed: {
             arDataTables() {
@@ -28,7 +35,13 @@
             },
             isLoading() {
                 return this.$store.getters.getLoading;
-            }
+            },
+            getError() {
+                return this.$store.getters.getError;
+            },
+            errorExist() {
+                return this.getError.length > 0;
+            },
         }
     }
 </script>

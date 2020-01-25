@@ -9,9 +9,11 @@ export default new Vuex.Store({
         cleanTableByKey(context, key) {
             context.commit('CLEAN_TABLE_BY_KEY', key);
         },
-
         deleteTableByKey(context, key) {
             context.commit('DELETE_TABLE_BY_KEY', key);
+        },
+        deleteError(context) {
+            context.commit('DELETE_ERROR');
         },
         setModalCreateTable(context){
             context.commit('SET_MODAL_CREATE_TABLE');
@@ -38,6 +40,7 @@ export default new Vuex.Store({
                     context.commit('ADD_DATA_TABLE', payload);
                 })
                 .catch(function (error) {
+                    context.commit('ADD_ERROR', 'Ошибка получения данных');
                     console.log(error);
                 })
                 .finally(function () {
@@ -61,11 +64,18 @@ export default new Vuex.Store({
         CLEAN_TABLE_BY_KEY(state, key) {
             state.arTablesData[key].rows = []
         },
+        ADD_ERROR(state, textError) {
+            state.error = textError;
+        },
+        DELETE_ERROR(state) {
+            state.error = '';
+        }
     },
     state: {
         isOpenModalCreateTable: false,
         arTablesData: [],
         isLoading: false,
+        error: ''
     },
     getters: {
         getOpenModalCreateTable(state){
@@ -73,6 +83,9 @@ export default new Vuex.Store({
         },
         getLoading(state) {
             return state.isLoading;
+        },
+        getError(state) {
+            return state.error;
         },
         getArDataTables(state){
             state.arTablesData.forEach((tableData) => {
