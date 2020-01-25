@@ -110,16 +110,6 @@
             onChangeCurrentPage(pageNumber) {
                 this.currentPage = pageNumber;
             },
-            getFilteredRows(rows) {
-                return rows.filter((element) => {
-                    let arElementValue = Object.values(element);
-                    return arElementValue.some((value) => {
-                        if (typeof (value) == "string") {
-                            return value.toLowerCase().indexOf(this.filterValue.toLowerCase()) !== -1;
-                        }
-                    });
-                })
-            },
             async copyTable() {
                 let objToCopy = {
                     'fields': this.fields,
@@ -137,21 +127,32 @@
         },
         computed: {
             getCountPages() {
-                if (this.rows) {
-                    return Math.ceil(this.rows.length / this.countPerPage)
+                if (this.getFilteredRows) {
+                    return Math.ceil(this.getFilteredRows.length / this.countPerPage)
                 }
                 return 0;
             },
             getViewChunkRows() {
                 let start = this.countPerPage * (this.currentPage - 1);
                 let end = this.countPerPage * this.currentPage;
-                let rows = this.rows;
-                if (this.filterValue.length > 0) {
-                    rows = this.getFilteredRows(rows);
-                }
+                let rows = this.getFilteredRows;
                 return rows.filter((element, index) => {
                     return index >= start && index < end
                 })
+            },
+            getFilteredRows() {
+                if (this.filterValue.length > 0) {
+                    return this.rows.filter((element) => {
+                        let arElementValue = Object.values(element);
+                        return arElementValue.some((value) => {
+                            if (typeof (value) == "string") {
+                                return value.toLowerCase().indexOf(this.filterValue.toLowerCase()) !== -1;
+                            }
+                        });
+                    })
+                } else {
+                    return this.rows;
+                }
             },
             addExtraClassHeader() {
                 return this.meta.header ? this.meta.header : '';
