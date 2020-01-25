@@ -1,9 +1,13 @@
 <template>
-    <table class="table mt-3">
-        <header-table
-             :fields-name="fields"
+    <div class="mt-4 col-12">
+        <search-table
+                v-model="filterValue"
         />
-        <tbody>
+        <table class="table mt-3">
+            <header-table
+                    :fields-name="fields"
+            />
+            <tbody>
             <row-table :key="keyRow" v-for="(row, keyRow) in getViewChunkRows"
                        :fields-value="row"
                        :fields-name="fields"
@@ -13,41 +17,44 @@
                        @deleteRow='onDeleteRow'
                        @addRowByKey='onAddRowByKey'
             />
-        </tbody>
-        <tfoot>
-        <tr>
-            <td>
-                <button class="btn btn-light" @click="cleanTable">Очистка таблицы</button>
-            </td>
-            <td>
-                <button class="btn btn-light" @click="deleteTable">Удаление таблицы</button>
-            </td>
-            <td>
-                <button class="btn btn-light" @click="copyTable">Копирование данных</button>
-            </td>
-            <td colspan="4">
-                <pagination-table
-                        :countPages="getCountPages"
-                        :currentPage="currentPage"
-                        @changeCurrentPage="onChangeCurrentPage"
-                />
-            </td>
-        </tr>
-        </tfoot>
-    </table>
+            </tbody>
+            <tfoot>
+            <tr>
+                <td>
+                    <button class="btn btn-light" @click="cleanTable">Очистка таблицы</button>
+                </td>
+                <td>
+                    <button class="btn btn-light" @click="deleteTable">Удаление таблицы</button>
+                </td>
+                <td>
+                    <button class="btn btn-light" @click="copyTable">Копирование данных</button>
+                </td>
+                <td colspan="4">
+                    <pagination-table
+                            :countPages="getCountPages"
+                            :currentPage="currentPage"
+                            @changeCurrentPage="onChangeCurrentPage"
+                    />
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
 </template>
 
 <script>
     import RowTable from "./RowTable";
     import HeaderTable from "./HeaderTable";
     import PaginationTable from "./PaginationTable";
+    import SearchTable from "./SearchTable";
 
     export default {
         name: 'VueTable',
         components: {
             RowTable,
             HeaderTable,
-            PaginationTable
+            PaginationTable,
+            SearchTable
         },
         props: {
             'fields': {
@@ -78,7 +85,8 @@
             return {
                 countPerPage: 10,
                 currentPage: 1,
-                textForCopySuccesed: 'Таблица успешно добавленна в буфер обмена'
+                textForCopySuccesed: 'Таблица успешно добавленна в буфер обмена',
+                filterValue: ''
             }
         },
         methods: {
@@ -101,6 +109,16 @@
             },
             onChangeCurrentPage(pageNumber) {
                 this.currentPage = pageNumber;
+            },
+            getFilteredRows(rows) {
+                return rows.filter((element) => {
+                    let arElementValue = Object.values(element);
+                    return arElementValue.some((value) => {
+                        if (typeof (value) == "string") {
+                            return value.toLowerCase().indexOf(this.filterValue.toLowerCase()) !== -1;
+                        }
+                    });
+                })
             },
             async copyTable() {
                 let objToCopy = {
@@ -127,7 +145,11 @@
             getViewChunkRows() {
                 let start = this.countPerPage * (this.currentPage - 1);
                 let end = this.countPerPage * this.currentPage;
-                return this.rows.filter((element, index) => {
+                let rows = this.rows;
+                if (this.filterValue.length > 0) {
+                    rows = this.getFilteredRows(rows);
+                }
+                return rows.filter((element, index) => {
                     return index >= start && index < end
                 })
             },
