@@ -6,6 +6,7 @@
         <table class="table mt-3">
             <header-table
                     :fields-name="fields"
+                    @sortRows='sortRows'
             />
             <tbody>
             <row-table :key="keyRow" v-for="(row, keyRow) in getViewChunkRows"
@@ -109,6 +110,18 @@
             },
             onChangeCurrentPage(pageNumber) {
                 this.currentPage = pageNumber;
+            },
+            sortRows(sortColumn, sortValue) {
+                this.rows.sort(function (a, b) {
+                    if (sortValue) {
+                        switch (sortValue) {
+                            case 'asc':
+                                return a[sortColumn] > b[sortColumn] ? 1 : -1;
+                            case 'desc':
+                                return a[sortColumn] < b[sortColumn] ? 1 : -1;
+                        }
+                    }
+                });
             },
             async copyTable() {
                 let objToCopy = {
