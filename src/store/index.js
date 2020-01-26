@@ -18,6 +18,13 @@ export default new Vuex.Store({
         setModalCreateTable(context){
             context.commit('SET_MODAL_CREATE_TABLE');
         },
+        setModalRecoverTable(context){
+            context.commit('SET_MODAL_RECOVER_TABLE');
+        },
+        recoveryDataTable(context, payload) {
+            context.commit('ADD_DATA_TABLE', payload);
+            context.commit('SET_MODAL_RECOVER_TABLE');
+        },
         async addDataTables(context, payload) {
             context.commit('SET_MODAL_CREATE_TABLE');
             context.commit('TOGGLE_LOADING');
@@ -52,6 +59,9 @@ export default new Vuex.Store({
         SET_MODAL_CREATE_TABLE(state){
             state.isOpenModalCreateTable = !state.isOpenModalCreateTable;
         },
+        SET_MODAL_RECOVER_TABLE(state){
+            state.isOpenModalRecoverTable = !state.isOpenModalRecoverTable;
+        },
         TOGGLE_LOADING(state){
             state.isLoading = !state.isLoading;
         },
@@ -73,6 +83,7 @@ export default new Vuex.Store({
     },
     state: {
         isOpenModalCreateTable: false,
+        isOpenModalRecoverTable: false,
         arTablesData: [],
         isLoading: false,
         error: ''
@@ -80,6 +91,9 @@ export default new Vuex.Store({
     getters: {
         getOpenModalCreateTable(state){
             return state.isOpenModalCreateTable;
+        },
+        getOpenModalRecoverTable(state){
+            return state.isOpenModalRecoverTable;
         },
         getLoading(state) {
             return state.isLoading;

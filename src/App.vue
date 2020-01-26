@@ -1,8 +1,11 @@
 <template>
     <div class="container">
-        <create-table/>
+        <div class="row">
+            <create-table/>
+            <recovery-table/>
+        </div>
         <div class="mb-5" v-for="(dataTable,keyTable) in arDataTables"
-        :key = keyTable>
+             :key=keyTable>
             <vue-table v-bind="dataTable" v-bind:key-table="keyTable"/>
         </div>
         <preloader v-if="isLoading"/>
@@ -16,6 +19,7 @@
 
 <script>
     import CreateTable from './components/CreateTable.vue'
+    import RecoveryTable from './components/RecoverTable.vue'
     import VueTable from './components/VueTable.vue'
     import Preloader from './components/preloader.vue'
     import ErrorModal from './components/ErrorModal.vue'
@@ -25,6 +29,7 @@
         name: 'app',
         components: {
             CreateTable,
+            RecoveryTable,
             VueTable,
             Preloader,
             ErrorModal
